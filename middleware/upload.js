@@ -30,9 +30,23 @@ const upload = multer({
   }
 });
 
+// Flexible upload middleware that handles both multipart and JSON
+const flexibleUpload = (req, res, next) => {
+  if (req.headers['content-type'] && req.headers['content-type'].startsWith('multipart/form-data')) {
+    return upload.fields([
+      { name: 'featuredImage', maxCount: 1 },
+      { name: 'sectionImages', maxCount: 10 }
+    ])(req, res, next);
+  } else {
+    // For JSON requests, just proceed
+    next();
+  }
+};
+
 // Export specific upload handlers
 module.exports = upload;
 module.exports.uploadFields = upload.fields([
   { name: 'featuredImage', maxCount: 1 },
   { name: 'sectionImages', maxCount: 10 }
 ]);
+module.exports.flexibleUpload = flexibleUpload;

@@ -19,10 +19,6 @@ const io = socketIo(server, {
 const PORT = process.env.PORT || 5000;
 
 // Import routes
-const blogRoutes = require('./routes/blogs');
-const categoryRoutes = require('./routes/categories');
-const tagRoutes = require('./routes/tags');
-const authorRoutes = require('./routes/authors');
 
 // Middleware
 app.use(cors());
@@ -42,10 +38,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => console.log('MongoDB connected'));
 
 // Routes
-app.use('/api/blogs', blogRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/tags', tagRoutes);
-app.use('/api/authors', authorRoutes);
 
 // Contact Schema (existing)
 const contactSchema = new mongoose.Schema({
