@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 5001;
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
+const feeRoutes = require('./routes/feeRoutes');
 
 // Middleware
 app.use(cors());
@@ -48,6 +49,9 @@ db.once('open', () => console.log('MongoDB connected'));
 
 // User routes
 app.use('/api/users', userRoutes);
+
+// Fee routes
+app.use('/api/fees', feeRoutes);
 
 // Contact Schema (existing)
 const contactSchema = new mongoose.Schema({
