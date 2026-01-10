@@ -16,9 +16,10 @@ const io = socketIo(server, {
     methods: ["GET", "POST"]
   }
 });
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Import routes
+const userRoutes = require('./routes/userRoutes');
 
 // Middleware
 app.use(cors());
@@ -27,6 +28,12 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Attach io to req for controllers
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -38,6 +45,9 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => console.log('MongoDB connected'));
 
 // Routes
+
+// User routes
+app.use('/api/users', userRoutes);
 
 // Contact Schema (existing)
 const contactSchema = new mongoose.Schema({
